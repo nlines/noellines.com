@@ -1,6 +1,5 @@
 <template>
   <div>
-    <h1>Welcome to My App</h1>
-    I'm Noel Lines!
+    <h1>I'm Noel Lines</h1>
   </div>
 </template>
