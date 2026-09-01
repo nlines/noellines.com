@@ -23,6 +23,21 @@ Then install dependencies:
 pnpm install
 ```
 
+### UI
+
+Components use [shadcn-nuxt](https://nuxt.com/modules/shadcn). It requires **Tailwind CSS** to be configured in the project first — shadcn-nuxt/shadcn-vue generate components as Tailwind utility classes, so there's no way to add it without Tailwind already in place.
+
+**Adding a component:**
+
+```bash
+pnpm dlx shadcn-vue@latest add <component>
+pnpm run fix:shadcn-extends
+```
+
+The second command is a required workaround, not optional cleanup: `@vue/compiler-sfc` fails to resolve `extends XxxProps` clauses in generated components with `[@vue/compiler-sfc] Failed to resolve extends base type`, because those prop types come from `reka-ui` through a large barrel re-export that its lightweight type resolver can't follow. This is a known, currently-unfixed upstream issue ([unovue/shadcn-vue#1504](https://github.com/unovue/shadcn-vue/issues/1504), [#207](https://github.com/unovue/shadcn-vue/issues/207)) — `reka-ui`, `shadcn-vue`, and `@vitejs/plugin-vue` are all already on their latest versions, so there's no version bump that resolves it. `scripts/fix-shadcn-extends.mjs` patches every generated component with the documented `/* @vue-ignore */` workaround; it's idempotent, so it's safe to run any time.
+
+A `vue.compilerOptions.skipExtendsCheck` config option is suggested in [one comment on #1504](https://github.com/unovue/shadcn-vue/issues/1504#issuecomment-3551291421) — **tested and confirmed not to work.** It doesn't appear anywhere in `@vue/compiler-sfc`'s source/types, isn't found via GitHub code search across `vuejs/core` or any public repo, and adding it to `nuxt.config.ts` produced the identical build error, unchanged. Don't re-investigate it.
+
 ## Development Server
 
 Start the development server on http://localhost:3000
