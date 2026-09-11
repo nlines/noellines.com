@@ -5,6 +5,12 @@ export default defineNuxtConfig({
   css: ['~/assets/css/tailwind.css'],
   devtools: { enabled: true },
 
+  app: {
+    head: {
+      titleTemplate: '%s · Noel Lines',
+    },
+  },
+
   routeRules: {
     // prerender index route by default
     '/': { prerender: true },
