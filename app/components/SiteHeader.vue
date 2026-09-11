@@ -58,34 +58,38 @@ watch(() => route.path, () => {
         Noel Lines
       </NuxtLink>
 
-      <nav class="hidden items-center gap-1 sm:flex">
-        <NuxtLink
-          v-for="link in links"
-          :key="link.to"
-          :to="link.to"
-          class="relative rounded-md px-3 py-2 text-sm transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
-          :class="isActive(link.to) ? 'text-foreground' : 'text-muted-foreground hover:text-foreground'"
-        >
-          {{ link.label }}
-          <span
-            v-if="isActive(link.to)"
-            class="absolute inset-x-3 -bottom-px h-0.5 rounded-full bg-primary"
-          />
-        </NuxtLink>
-      </nav>
+      <div class="flex items-center gap-1">
+        <nav class="hidden items-center gap-1 sm:flex">
+          <NuxtLink
+            v-for="link in links"
+            :key="link.to"
+            :to="link.to"
+            class="relative rounded-md px-3 py-2 text-sm transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+            :class="isActive(link.to) ? 'text-foreground' : 'text-muted-foreground hover:text-foreground'"
+          >
+            {{ link.label }}
+            <span
+              v-if="isActive(link.to)"
+              class="absolute inset-x-3 -bottom-px h-0.5 rounded-full bg-primary"
+            />
+          </NuxtLink>
+        </nav>
 
-      <button
-        ref="menuButton"
-        type="button"
-        class="inline-flex size-9 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none sm:hidden"
-        :aria-label="open ? 'Close menu' : 'Open menu'"
-        :aria-expanded="open"
-        aria-controls="site-nav-mobile"
-        @click="open = !open"
-      >
-        <X v-if="open" class="size-5" />
-        <Menu v-else class="size-5" />
-      </button>
+        <ThemeToggle />
+
+        <button
+          ref="menuButton"
+          type="button"
+          class="inline-flex size-9 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none sm:hidden"
+          :aria-label="open ? 'Close menu' : 'Open menu'"
+          :aria-expanded="open"
+          aria-controls="site-nav-mobile"
+          @click="open = !open"
+        >
+          <X v-if="open" class="size-5" />
+          <Menu v-else class="size-5" />
+        </button>
+      </div>
     </div>
 
     <nav
