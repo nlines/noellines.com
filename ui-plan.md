@@ -26,7 +26,7 @@ Working notes for this site's theme and design decisions. Living document — up
 
 Ordered build-out. Each phase flags which shadcn components it actually needs — see [Cost of the shadcn workaround](#cost-of-the-shadcn-workaround) for why that count matters.
 
-### Phase 1 — Routing skeleton
+### Phase 1 — Routing skeleton ✅ done
 
 Convert the single-file `app/app.vue` into a real page structure.
 
@@ -37,12 +37,18 @@ Convert the single-file `app/app.vue` into a real page structure.
 
 **shadcn components needed: none.** Pure Nuxt routing.
 
-### Phase 2 — Top nav
+**Gotcha found while building:** `routeRules: { '/**': { prerender: true } }` does *not* work. It marks routes as prerenderable but never seeds the prerender queue, so the build silently emits zero HTML files. Use `nitro.prerender` with an explicit seed route plus `crawlLinks` instead.
+
+### Phase 2 — Top nav ✅ done
 
 - `app/components/SiteHeader.vue` — site name + four `<NuxtLink>`s, `active-class` for current-route styling
 - Mobile: below `sm`, either a plain CSS disclosure or shadcn `sheet` for a slide-out drawer
 
 **shadcn components needed: 0–1** (`sheet`, only if we want a drawer over a simple stacked menu). A four-link nav does not need `navigation-menu` — that component exists for multi-level dropdown menus.
+
+Built with a plain Vue-state stacked menu, so **zero** shadcn components were needed. Note that `active-class` was not usable as written: routes are flat, so NuxtLink's prefix matching marks `/` active on every page. An exact `route.path === to` test is used instead.
+
+**Open question — conflicts with the design exploration.** The design references saved from the Site Design Inspo session point at a matthewencina.com-style hero, whose nav is deliberately minimal: name + hamburger only, with no visible link list even on desktop. That is incompatible with the four-link top nav decided here. The current build implements *this* plan (four visible links) because it is the decision of record and is needed to navigate while building. Resolve before the hero design lands.
 
 ### Phase 3 — Dark/light toggle
 
@@ -68,6 +74,25 @@ Implements the light/dark decision recorded under [Theme](#theme).
 Every `shadcn-vue add` needs a follow-up `pnpm run fix:shadcn-extends` (see [README.md](README.md) for the full explanation — it's an architectural limitation of `@vue/compiler-sfc`, not a bug awaiting a fix upstream).
 
 Totalling the phases above: **4–6 more `add` calls over the life of this site**, essentially all front-loaded into the initial build. The friction scales with the number of shadcn components, and a personal site needs very few — most of the work here is layout, typography, and Tailwind utilities, which are unaffected. That count is the number to weigh against any future proposal to re-platform.
+
+### Second-order cost: the ignored props become undeclared
+
+Found while building Phase 1. The workaround is not purely cosmetic, and this was not accounted for when the stay-on-shadcn decision was made.
+
+Because `/* @vue-ignore */` tells the compiler to skip `extends PrimitiveProps`, the props from that base type — `as` and `asChild` — are never declared as runtime props. `Button.vue`'s template still references them, so **every render logs two Vue warnings**:
+
+```
+[Vue warn]: Property "as" was accessed during render but is not defined on instance.  at <Button as-child="">
+[Vue warn]: Property "asChild" was accessed during render but is not defined on instance.
+```
+
+`<Button as-child>` still renders the correct markup, but only incidentally: the attributes fall through to `Primitive`, which declares those props itself. `withDefaults(..., { as: "button" })` is silently dead, since `as` is not a prop to default.
+
+The warnings are dev-only (stripped from production builds), so this is noise rather than breakage. Practical consequences:
+
+- Prefer `buttonVariants()` on the element directly over `<Button as-child>`. This is shadcn's documented pattern for a link styled as a button anyway, and it produces identical markup with no warnings. Used on the Home CTAs.
+- Expect the same for every future component whose props extend a reka-ui base type, which is most interactive ones.
+- If this becomes noisy enough to matter, the fix is to declare `as`/`asChild` explicitly in the generated component instead of inheriting them — at which point `fix:shadcn-extends` would need to stop patching that file.
 
 ## Decisions Log
 
