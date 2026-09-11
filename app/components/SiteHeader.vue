@@ -10,11 +10,39 @@ const links = [
 
 const route = useRoute()
 const open = ref(false)
+const menuButton = ref<HTMLButtonElement | null>(null)
 
 // Routes are flat, so an exact match is right for every link — '/' would
 // prefix-match every route if we used NuxtLink's default active class.
 const isActive = (to: string) => route.path === to
 
+const closeMenu = () => {
+  open.value = false
+  // Closing hides the panel, so focus would otherwise fall to <body> and a
+  // keyboard user would have to tab from the top of the page again.
+  menuButton.value?.focus()
+}
+
+const onEscape = (event: KeyboardEvent) => {
+  if (event.key === 'Escape') closeMenu()
+}
+
+// Bound to the document rather than the header so Escape still works when
+// focus has moved outside the menu, and only attached while it is open.
+watch(open, (isOpen) => {
+  if (isOpen) document.addEventListener('keydown', onEscape)
+  else document.removeEventListener('keydown', onEscape)
+})
+
+onBeforeUnmount(() => {
+  document.removeEventListener('keydown', onEscape)
+})
+
+// Navigating closes the menu without restoring focus to the trigger, since
+// the user is moving to a new page rather than dismissing the menu. Note
+// nothing currently moves focus on route change either, so a keyboard user
+// who activates a link here lands back at <body>; worth revisiting if route
+// focus management is added site-wide.
 watch(() => route.path, () => {
   open.value = false
 })
@@ -47,6 +75,7 @@ watch(() => route.path, () => {
       </nav>
 
       <button
+        ref="menuButton"
         type="button"
         class="inline-flex size-9 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none sm:hidden"
         :aria-label="open ? 'Close menu' : 'Open menu'"
