@@ -12,7 +12,7 @@ Working notes for this site's theme and design decisions. Living document — up
 ## Navigation
 
 - Pages: **Home, About/Bio, Projects/Portfolio, Contact/Links.**
-- Nav pattern: **simple top nav** — a horizontal header/nav bar linking to each section. Standard pattern that scales fine for this page count (4).
+- Nav pattern: **minimal header — name + menu button at every width**, with no visible link list even on desktop, following matthewencina.com. Opens a full-screen overlay menu listing the four routes in large type. Supersedes the earlier "simple top nav" decision; see the Decisions Log for why.
 
 ## Theme
 
@@ -46,9 +46,16 @@ Convert the single-file `app/app.vue` into a real page structure.
 
 **shadcn components needed: 0–1** (`sheet`, only if we want a drawer over a simple stacked menu). A four-link nav does not need `navigation-menu` — that component exists for multi-level dropdown menus.
 
-Built with a plain Vue-state stacked menu, so **zero** shadcn components were needed. Note that `active-class` was not usable as written: routes are flat, so NuxtLink's prefix matching marks `/` active on every page. An exact `route.path === to` test is used instead.
+**Resolved to the minimal header instead** — name + menu button at every width, no visible link list. Built with **zero** shadcn components.
 
-**Open question — conflicts with the design exploration.** The design references saved from the Site Design Inspo session point at a matthewencina.com-style hero, whose nav is deliberately minimal: name + hamburger only, with no visible link list even on desktop. That is incompatible with the four-link top nav decided here. The current build implements *this* plan (four visible links) because it is the decision of record and is needed to navigate while building. Resolve before the hero design lands.
+The menu uses reka-ui's dialog primitives (`DialogRoot`/`DialogPortal`/`DialogOverlay`/`DialogContent`) directly rather than shadcn's `sheet`. Two reasons:
+
+1. Once the nav is hidden behind a button at *every* width, it is the only way through the site, so it needs real modal behaviour — focus trap, Escape, scroll lock, focus restore. reka-ui provides all four; hand-rolling a focus trap is the easy thing to get subtly wrong.
+2. **reka-ui ships compiled**, so its own components never pass through `@vue/compiler-sfc` in this project. Consuming them directly sidesteps the `extends` workaround and its `as`/`asChild` fallout entirely — no `add`, no `fix:shadcn-extends`, no warnings.
+
+That second point generalises: **when a shadcn component would only be a thin styled wrapper over a reka-ui primitive, using the primitive directly avoids the workaround altogether.** Worth reaching for before the next `shadcn-vue add`.
+
+Note `active-class` was not usable as written: routes are flat, so NuxtLink's prefix matching marks `/` active on every page. An exact `route.path === to` test is used instead, paired with `aria-current="page"`.
 
 ### Phase 3 — Dark/light toggle
 
@@ -104,5 +111,7 @@ The warnings are dev-only (stripped from production builds), so this is noise ra
 - **Typography: Inter (webfont), not system stack as originally planned.** `shadcn-vue init` defaulted to Inter without prompting; kept it rather than reverting, revisit later if desired.
 - **Accent/brand color: Amber.** Warm accent to pair with Stone; sets `--primary`/`--accent`/`--ring` manually post-init (not a CLI prompt), using real Tailwind v4 amber OKLCH values.
 - **Border radius: shadcn default (`0.625rem`).** No case found for deviating from the default.
-- **Pages: Home, About/Bio, Projects/Portfolio, Contact/Links.** Nav pattern: simple top nav.
+- **Pages: Home, About/Bio, Projects/Portfolio, Contact/Links.**
+- **Nav pattern: minimal header (name + menu button at every width), superseding the earlier four-link top nav.** Chosen deliberately for the restraint, with the discoverability cost understood: the four-link version was built first and was the recommendation, on the grounds that the hero drama does not actually depend on hiding the nav — matthewencina.com's header is a solid bar *above* its hero, not a transparent overlay, so a visible link list and a full-bleed portrait hero can coexist. Preference for the minimal look won on its own merits rather than as a means to the hero.
+- **Hidden-nav components come from reka-ui directly, not shadcn.** reka-ui ships compiled, so its primitives dodge the `@vue/compiler-sfc` `extends` workaround completely. Prefer a primitive over a `shadcn-vue add` wherever the shadcn component is just styling over one.
 - **Staying on shadcn-nuxt despite the `@vue/compiler-sfc` extends friction.** Re-evaluated after hitting it: upstream treats `/* @vue-ignore */` as the prescribed remedy rather than a bug to fix (Vue core emits it in the error itself; related `vuejs/core` issues have sat open since 2023), so it won't resolve on its own. Kept anyway because the cost is bounded — 4–6 remaining `add` calls, each needing one already-automated command. Nuxt UI would sidestep it entirely (ships compiled components, so nothing in-repo compiles an `extends` clause) but forfeits the code-ownership property that motivated the original choice.
