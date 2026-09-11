@@ -35,7 +35,7 @@ export default defineNuxtConfig({
     // without this no dark styles apply at all.
     classSuffix: '',
     preference: 'system',
-    fallback: 'light',
+    fallback: 'dark',
   },
 
   shadcn: {
