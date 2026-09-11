@@ -19,6 +19,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Home, About, Projects and Contact pages, with placeholder content and a shared default layout.
 - Site header with a sticky four-link nav that collapses to a hamburger menu on small screens, plus a site footer.
 - Per-page titles via a `%s · Noel Lines` template.
+- Escape now closes the small-screen nav menu, returning focus to the menu button.
+- Tri-state theme toggle (light / dark / system) in the site header, backed by [`@nuxtjs/color-mode`](https://github.com/nuxt-modules/color-mode). The chosen preference persists, and the theme is applied before first paint so there is no flash.
 
 ### Changed
 
