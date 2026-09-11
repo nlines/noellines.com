@@ -29,4 +29,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Bumped `@nuxt/devtools` off a stale `^1.0.3` pin that pulled a second major version of Vite into the dependency tree.
 - All four routes are now prerendered, via a seeded `nitro.prerender` crawl rather than a single route rule.
 
+### Fixed
+
+- Hero eyebrow text now meets WCAG AA contrast in light mode. It took its colour from `--primary`, which is tuned to work as a fill behind dark text and reached only 3.2:1 as small text on white, against the 4.5:1 floor.
+
 [Unreleased]: https://github.com/nlines/noellines.com/compare/main...HEAD

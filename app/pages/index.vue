@@ -9,7 +9,12 @@ useHead({ title: 'Home' })
        full-bleed portrait with an oversized headline overlapping it; this is
        deliberately plain until that treatment and the photography exist. -->
   <section class="mx-auto flex w-full max-w-5xl flex-col items-start gap-6 px-6 py-24 sm:py-32">
-    <p class="text-sm font-medium tracking-widest text-primary uppercase">
+    <!-- Deliberately not text-primary in light mode: --primary is tuned to
+         work as a *fill* behind dark text, and at this size as text on white
+         it only reaches 3.2:1, under the 4.5 AA floor for normal-size copy.
+         amber-700 reaches 5.03:1. Dark mode has no such problem, so it keeps
+         the token. -->
+    <p class="text-sm font-medium tracking-widest text-amber-700 uppercase dark:text-primary">
       Placeholder
     </p>
 
