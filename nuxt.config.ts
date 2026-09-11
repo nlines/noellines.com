@@ -13,11 +13,12 @@ export default defineNuxtConfig({
 
   nitro: {
     prerender: {
-      // Fully static site. '/' seeds the crawl and the header nav links out
-      // to every other route, so /about, /projects and /contact are picked
-      // up automatically. A wildcard route rule does NOT work here: it marks
-      // routes prerenderable but never seeds the queue, so nothing is built.
-      routes: ['/'],
+      // Fully static site. Routes are listed explicitly rather than relying
+      // on link crawling: the nav lives inside a closed dialog, so it is not
+      // in the prerendered HTML and there is nothing to crawl from. Note a
+      // wildcard route rule does NOT work here either — it marks routes
+      // prerenderable but never seeds the queue, so nothing gets built.
+      routes: ['/', '/about', '/projects', '/contact'],
       crawlLinks: true,
     },
   },
