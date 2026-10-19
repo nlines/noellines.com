@@ -19,6 +19,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Home, About, Projects and Contact pages, with placeholder content and a shared default layout.
 - Site header with a sticky four-link nav that collapses to a hamburger menu on small screens, plus a site footer.
 - Per-page titles via a `%s · Noel Lines` template.
+- Escape now closes the small-screen nav menu, returning focus to the menu button.
+- Tri-state theme toggle (light / dark / system) in the site header, backed by [`@nuxtjs/color-mode`](https://github.com/nuxt-modules/color-mode). The chosen preference persists, and the theme is applied before first paint so there is no flash.
 
 ### Changed
 
@@ -26,5 +28,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Upgraded Nuxt 3 to Nuxt 4; app code now lives under `app/`.
 - Bumped `@nuxt/devtools` off a stale `^1.0.3` pin that pulled a second major version of Vite into the dependency tree.
 - All four routes are now prerendered, via a seeded `nitro.prerender` crawl rather than a single route rule.
+- Dark mode uses the same amber accent as light mode. It previously used a lighter shade from further up Tailwind's amber ramp, which also reads noticeably more yellow, since the ramp shifts hue as it lightens.
+
+### Fixed
+
+- Hero eyebrow text now meets WCAG AA contrast in light mode. It took its colour from `--primary`, which is tuned to work as a fill behind dark text and reached only 3.2:1 as small text on white, against the 4.5:1 floor.
 
 [Unreleased]: https://github.com/nlines/noellines.com/compare/main...HEAD

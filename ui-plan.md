@@ -50,15 +50,37 @@ Built with a plain Vue-state stacked menu, so **zero** shadcn components were ne
 
 **Open question — conflicts with the design exploration.** The design references saved from the Site Design Inspo session point at a matthewencina.com-style hero, whose nav is deliberately minimal: name + hamburger only, with no visible link list even on desktop. That is incompatible with the four-link top nav decided here. The current build implements *this* plan (four visible links) because it is the decision of record and is needed to navigate while building. Resolve before the hero design lands.
 
-### Phase 3 — Dark/light toggle
+### Phase 3 — Dark/light toggle ✅ done
 
 Implements the light/dark decision recorded under [Theme](#theme).
 
 - Add [`@nuxtjs/color-mode`](https://github.com/nuxt-modules/color-mode) (v4.0.1)
-- **Gotcha:** the module defaults to `classSuffix: '-mode'`, which puts `dark-mode` on `<html>`. Our Tailwind file declares `@custom-variant dark (&:is(.dark *))`, which needs a bare `.dark`. Set `colorMode: { classSuffix: '' }` in [nuxt.config.ts](nuxt.config.ts) or no dark styles will apply.
-- `app/components/ThemeToggle.vue` — `Button` for a simple light/dark flip, or `dropdown-menu` for tri-state light/dark/system
+- **Gotcha:** the module defaults to `classSuffix: '-mode'`, which puts `dark-mode` on `<html>`. Our Tailwind file declares `@custom-variant dark (&:is(.dark *))`, which needs a bare `.dark`. Set `colorMode: { classSuffix: '' }` in [nuxt.config.ts](nuxt.config.ts) or no dark styles will apply. Confirmed: this was required.
+- `app/components/ThemeToggle.vue` — tri-state light/dark/system.
 
-**shadcn components needed: 0–1.** `button` is already added; add `dropdown-menu` only if we want the system option exposed.
+Built with **zero** shadcn components. `reka-ui`'s dropdown primitives are used
+directly, as with any other menu or overlay here — see the note below.
+
+**The trigger icon must not depend on the resolved theme.** The resolved value
+is unknowable while prerendering, since it comes from localStorage or the OS,
+so branching on it renders differently on server and client. Rather than defer
+behind `ClientOnly`, both icons are rendered and CSS picks one from the `.dark`
+class, which the module's inline script applies before paint. That keeps the
+markup identical on both sides, with no hydration mismatch, no deferral and no
+placeholder box to avoid layout shift.
+
+### Prefer reka-ui primitives over adding shadcn components
+
+Worth stating generally, since it applies well beyond any one component:
+**`reka-ui` ships compiled**, so consuming its primitives directly sidesteps the
+`@vue/compiler-sfc` `extends` problem entirely — no `shadcn-vue add`, no
+`fix:shadcn-extends` run, and no `as`/`asChild` warnings. shadcn's components
+are largely styled wrappers over these same primitives, so the cost of going
+direct is writing the classes yourself.
+
+Reach for `shadcn-vue add` only when a component's styling is substantial
+enough to be worth inheriting. Both the nav menu and this theme toggle were
+built this way, which is why the component budget below remains untouched.
 
 ### Phase 4 — Page content
 
@@ -105,4 +127,6 @@ The warnings are dev-only (stripped from production builds), so this is noise ra
 - **Accent/brand color: Amber.** Warm accent to pair with Stone; sets `--primary`/`--accent`/`--ring` manually post-init (not a CLI prompt), using real Tailwind v4 amber OKLCH values.
 - **Border radius: shadcn default (`0.625rem`).** No case found for deviating from the default.
 - **Pages: Home, About/Bio, Projects/Portfolio, Contact/Links.** Nav pattern: simple top nav.
+- **Theme toggle is tri-state (light/dark/system), not a binary flip.** The Theme section above says system preference is respected by default with a user override, which needs all three states exposed rather than a two-way switch.
+- **Prefer reka-ui primitives over `shadcn-vue add`.** reka-ui ships compiled, so using it directly avoids the compiler-sfc extends workaround altogether; add a shadcn component only when its styling is worth inheriting. Both the nav menu and the theme toggle were built this way.
 - **Staying on shadcn-nuxt despite the `@vue/compiler-sfc` extends friction.** Re-evaluated after hitting it: upstream treats `/* @vue-ignore */` as the prescribed remedy rather than a bug to fix (Vue core emits it in the error itself; related `vuejs/core` issues have sat open since 2023), so it won't resolve on its own. Kept anyway because the cost is bounded — 4–6 remaining `add` calls, each needing one already-automated command. Nuxt UI would sidestep it entirely (ships compiled components, so nothing in-repo compiles an `extends` clause) but forfeits the code-ownership property that motivated the original choice.

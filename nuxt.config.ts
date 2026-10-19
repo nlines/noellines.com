@@ -26,7 +26,17 @@ export default defineNuxtConfig({
     plugins: [tailwindcss()],
   },
 
-  modules: ['shadcn-nuxt'],
+  modules: ['shadcn-nuxt', '@nuxtjs/color-mode'],
+
+  colorMode: {
+    // The module defaults to classSuffix '-mode', which would put
+    // `dark-mode` on <html>. Tailwind's dark variant here is declared as
+    // `@custom-variant dark (&:is(.dark *))` and needs a bare `.dark`, so
+    // without this no dark styles apply at all.
+    classSuffix: '',
+    preference: 'system',
+    fallback: 'dark',
+  },
 
   shadcn: {
     prefix: '',
