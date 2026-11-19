@@ -21,34 +21,43 @@ import { buttonVariants } from '@/components/ui/button'
       <!-- Only the <img> moves with scroll. The gradients below stay put, so
            the bottom fade always sits at the section edge; if they travelled
            with the photo, the section's overflow clip would cut the fade
-           short and leave a hard edge. -->
-      <img
-        src="/images/hero-portrait-1200.jpg"
-        srcset="
-          /images/hero-portrait-800.jpg   800w,
-          /images/hero-portrait-1200.jpg 1200w,
-          /images/hero-portrait-2000.jpg 2000w
-        "
-        sizes="(min-width: 768px) 70vw, 100vw"
-        width="2000"
-        height="1333"
-        alt="Portrait of Noel Lines smiling, one arm stretched out to the side, in a dimly lit workshop with warm orange lighting."
-        fetchpriority="high"
-        decoding="async"
-        class="hero-photo absolute top-0 right-0 h-[80%] w-full object-cover object-[50%_18%] max-md:[mask-image:linear-gradient(to_bottom,black_55%,transparent)] md:h-full md:w-[70%] md:object-[50%_20%] md:[mask-image:linear-gradient(to_right,transparent,black_55%)]"
+           short and leave a hard edge. The edge masks live on this static
+           wrapper, not the moving <img>: a mask on a transformed element left
+           a faint line at the section's bottom edge while scrolling. -->
+      <div
+        class="absolute top-0 right-0 h-[80%] w-full max-md:[mask-image:linear-gradient(to_bottom,black_55%,transparent)] md:h-full md:w-[78%] md:[mask-image:linear-gradient(to_right,transparent,rgb(0_0_0/.5)_9%,rgb(0_0_0/.8)_22%,black_42%)]"
       >
+        <img
+          src="/images/hero-portrait-1200.jpg"
+          srcset="
+            /images/hero-portrait-800.jpg   800w,
+            /images/hero-portrait-1200.jpg 1200w,
+            /images/hero-portrait-2000.jpg 2000w
+          "
+          sizes="(min-width: 768px) 78vw, 100vw"
+          width="2000"
+          height="1333"
+          alt="Portrait of Noel Lines smiling, one arm stretched out to the side, in a dimly lit workshop with warm orange lighting."
+          fetchpriority="high"
+          decoding="async"
+          class="hero-photo size-full object-cover object-[50%_18%] md:object-[0%_20%]"
+        >
+      </div>
 
       <!-- Below `md` the photo stops short of the section bottom, so a section
            level gradient cannot hide its edge; it is masked to transparent
-           instead (see the img classes). From `md` up it runs the full height
-           and the gradients below do the work. The photo also covers only the
-           right 70%, so a section-wide gradient can't hide its left edge
-           either: from `md` up the img is masked to fade in from that edge.
+           instead (see the wrapper classes). From `md` up it runs the full height
+           and the gradients below do the work. The photo covers the right 78%,
+           so a section-wide gradient can't hide its left edge: from `md` up
+           the wrapper is masked to fade in from that edge, in several soft steps.
 
-           The left gradient keeps the headline legible, and the bottom one
-           hands the hero off cleanly to the next section. -->
-      <div class="absolute inset-0 bg-gradient-to-r from-background via-background/55 via-35% to-transparent to-70% max-md:hidden" />
-      <div class="absolute inset-x-0 bottom-0 h-2/5 bg-gradient-to-t from-background via-background/80 to-transparent" />
+           The photo is anchored left (`object-[0%_...]`) so the lit PC case at
+           its bottom-left stays in frame. To keep that case visible, the left
+           gradient is light and the bottom fade is held back on the left. The
+           left gradient still keeps the headline legible, and the bottom one
+           hands the hero off to the next section. -->
+      <div class="absolute inset-0 bg-gradient-to-r from-background via-background/15 via-25% to-transparent to-48% max-md:hidden" />
+      <div class="absolute inset-x-0 bottom-0 h-2/5 bg-gradient-to-t from-background via-background/80 to-transparent md:h-[30%] md:via-background/55 md:[mask-image:linear-gradient(to_right,transparent_10%,black_50%)]" />
 
       <!-- A solid strip over the last few pixels. The photo is transformed on
            scroll, and where a transformed layer meets the section's overflow
