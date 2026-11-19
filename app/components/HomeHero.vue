@@ -72,7 +72,7 @@ import { buttonVariants } from '@/components/ui/button'
       </p>
 
       <!-- Sized to overlap the portrait on desktop; each role breaks onto its
-           own line the way the reference site stacks its roles. -->
+           own line. -->
       <h1 class="hero-headline text-[clamp(3.25rem,11.5vw,9.5rem)] leading-[1] font-bold tracking-tighter text-balance">
         <span class="block">Engineer</span>
         <span class="block">Builder</span>

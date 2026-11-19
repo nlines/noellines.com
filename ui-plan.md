@@ -48,7 +48,7 @@ Convert the single-file `app/app.vue` into a real page structure.
 
 Built with a plain Vue-state stacked menu, so **zero** shadcn components were needed. Note that `active-class` was not usable as written: routes are flat, so NuxtLink's prefix matching marks `/` active on every page. An exact `route.path === to` test is used instead.
 
-**Resolved — the nav does not conflict with the hero.** The design exploration pointed at a matthewencina.com-style hero, whose nav is minimal (name + hamburger). A minimal header was built and then reverted in favour of the four-link nav, because the reference site's header is a solid bar sitting *above* the hero rather than an overlay: the hero look does not depend on hiding the links. The four-link header stands. See [Hero direction](#hero-direction).
+**Resolved — the nav does not conflict with the hero.** The design exploration pointed at a hero with a minimal nav (name + hamburger). A minimal header was built and then reverted in favour of the four-link nav, because the header is a solid bar sitting *above* the hero rather than an overlay: the hero look does not depend on hiding the links. The four-link header stands. See [Hero direction](#hero-direction).
 
 ### Phase 3 — Dark/light toggle ✅ done
 
@@ -93,13 +93,13 @@ built this way, which is why the component budget below remains untouched.
 
 ### Hero direction
 
-The Home hero follows [matthewencina.com](https://matthewencina.com): a large portrait with an oversized headline overlapping it, on a **dark-first** design. Dark is the primary design target; light mode is supported but secondary.
+The Home hero is a large portrait with an oversized headline overlapping it, on a **dark-first** design. Dark is the primary design target; light mode is supported but secondary.
 
 - **Layout:** portrait anchored to one side, giant bold headline overlapping the figure. The header stays a solid bar above it.
 - **Portrait:** a full photo rather than a cutout. Its own background is already near-black, so it is faded into the page with gradients (and an image mask on the left edge) instead of being masked out. Right-anchored on desktop so the headline overlaps the arm and shoulder, not the face. The hero is forced dark in every mode for now; the light-mode treatment still needs its own decision.
-- **Motion:** CSS only, no animation library. Scroll-driven animations (`animation-timeline: scroll()` / `view()`) are supported in all three engines by default: Chrome 115, Safari 26 and Firefox 159 (current stable is 160, per MDN's compat data). Older Firefox will not animate, so it is a progressive enhancement: content must be fully visible with no animation, wrap rules in `@supports (animation-timeline: scroll())`, and honour `prefers-reduced-motion`. The reference site itself is built in Framer, whose runtime is JavaScript, so this reproduces its *effect* rather than its implementation.
-- **Fallback:** [mokkapps.de](https://mokkapps.de) — a dark, single-accent hero with a framed greyscale portrait at lower right. More conservative; the retreat position if the overlapping-headline approach gets out of hand.
-- **Deferred:** alternating section bands and the masonry Projects grid from lepiten.com. The grid needs real project imagery.
+- **Motion:** CSS only, no animation library. Scroll-driven animations (`animation-timeline: scroll()` / `view()`) are supported in all three engines by default: Chrome 115, Safari 26 and Firefox 159 (current stable is 160, per MDN's compat data). Older Firefox will not animate, so it is a progressive enhancement: content must be fully visible with no animation, wrap rules in `@supports (animation-timeline: scroll())`, and honour `prefers-reduced-motion`.
+- **Fallback:** a more conservative hero — a dark, single-accent layout with a framed portrait at lower right and the headline beside it rather than over it. The retreat position if the overlapping-headline approach gets out of hand.
+- **Deferred:** alternating section bands and a masonry Projects grid. The grid needs real project imagery.
 
 Status: scaffold built with the portrait and the headline "Engineer / Builder / Technologist". Inter stays for the headline; a condensed display face was considered and deferred. Still open: the light-mode treatment, the header over the photo in light mode, and the section bands below the hero.
 
@@ -143,5 +143,5 @@ The warnings are dev-only (stripped from production builds), so this is noise ra
 - **Prefer reka-ui primitives over `shadcn-vue add`.** reka-ui ships compiled, so using it directly avoids the compiler-sfc extends workaround altogether; add a shadcn component only when its styling is worth inheriting. Both the nav menu and the theme toggle were built this way.
 - **Staying on shadcn-nuxt despite the `@vue/compiler-sfc` extends friction.** Re-evaluated after hitting it: upstream treats `/* @vue-ignore */` as the prescribed remedy rather than a bug to fix (Vue core emits it in the error itself; related `vuejs/core` issues have sat open since 2023), so it won't resolve on its own. Kept anyway because the cost is bounded — 4–6 remaining `add` calls, each needing one already-automated command. Nuxt UI would sidestep it entirely (ships compiled components, so nothing in-repo compiles an `extends` clause) but forfeits the code-ownership property that motivated the original choice.
 - **Dark is the primary design target.** Stated when `colorMode.fallback` was changed to `'dark'`. The default preference is still `'system'`, so a visitor whose OS reports light still gets light; dark is the fallback and the design priority, not a forced theme.
-- **Hero follows matthewencina.com, with mokkapps.de as the fallback.** Large overlapping headline over a portrait cutout, on dark. The more creative approach is tried first; mokkapps is the more conservative retreat if it gets out of hand. The earlier nav-vs-hero conflict note is closed: the reference's header is a bar above the hero, so the four-link nav stands.
+- **Hero: large overlapping headline over a portrait, on dark, with a more conservative layout as the fallback.** The more creative approach is tried first; the conservative one is the retreat if it gets out of hand. The earlier nav-vs-hero conflict note is closed: the header is a bar above the hero, so the four-link nav stands.
 - **Hero scroll motion is CSS only.** Verified rather than assumed: scroll-driven animations are in Chrome 115, Safari 26 and Firefox 159 by default. Treated as progressive enhancement behind `@supports`, with `prefers-reduced-motion` honoured. No animation library.
