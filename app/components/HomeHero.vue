@@ -25,7 +25,7 @@ import { buttonVariants } from '@/components/ui/button'
            wrapper, not the moving <img>: a mask on a transformed element left
            a faint line at the section's bottom edge while scrolling. -->
       <div
-        class="absolute top-0 right-0 h-[80%] w-full max-md:[mask-image:linear-gradient(to_bottom,black_55%,transparent)] md:h-full md:w-[78%] md:[mask-image:linear-gradient(to_right,transparent,rgb(0_0_0/.5)_9%,rgb(0_0_0/.8)_22%,black_42%)]"
+        class="hero-frame absolute top-0 right-0 h-[80%] w-full max-md:[mask-image:linear-gradient(to_bottom,black_55%,transparent)] md:h-full md:w-[78%] md:[mask-image:linear-gradient(to_right,transparent,rgb(0_0_0/.5)_9%,rgb(0_0_0/.8)_22%,black_42%)]"
       >
         <img
           src="/images/hero-portrait-1200.jpg"
@@ -109,6 +109,32 @@ import { buttonVariants } from '@/components/ui/button'
       animation: hero-headline-lift linear both;
       animation-timeline: scroll(root);
       animation-range: 0 100svh;
+    }
+  }
+}
+
+/* From `md` up the photo is height-bound: it is scaled to the section's
+   height and cropped to its box, so how much of the face survives depends on
+   the viewport's aspect ratio. A fixed object-position cuts the face off
+   on tall narrow screens (a portrait tablet), so the offset is computed from
+   the box instead: aim the face (about 53% across the photo) at 62% across
+   the box, never leaving a gap at either edge. The wide case clamps back to 0,
+   which is the left anchor the desktop layout wants. The `object-[0%_20%]`
+   utility stays as the fallback where container query units are missing. */
+@media (min-width: 768px) {
+  @supports (width: 1cqw) {
+    .hero-frame {
+      container-type: size;
+    }
+
+    .hero-photo {
+      object-position:
+        clamp(
+          min(0px, 100cqw - 150cqh),
+          62cqw - 0.53 * max(100cqw, 150cqh),
+          0px
+        )
+        20%;
     }
   }
 }

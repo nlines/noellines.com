@@ -1,5 +1,10 @@
 <script setup lang="ts">
-useHead({ title: 'Home' })
+// Home gets the full tagline as its whole title; the site-wide
+// `%s · Noel Lines` template would turn it into "…· Noel Lines".
+useHead({
+  title: 'Noel Lines - Engineer, Builder, Technologist',
+  titleTemplate: '%s',
+})
 </script>
 
 <template>
