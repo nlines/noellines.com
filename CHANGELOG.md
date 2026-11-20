@@ -33,4 +33,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - All four routes are now prerendered, via a seeded `nitro.prerender` crawl rather than a single route rule.
 - Dark mode uses the same amber accent as light mode. It previously used a lighter shade from further up Tailwind's amber ramp, which also reads noticeably more yellow, since the ramp shifts hue as it lightens.
 
+### Fixed
+
+- Home hero portrait no longer crops out the face at the narrow end of the tablet breakpoint (about 768px wide); its horizontal position is now computed from the hero's size instead of being fixed.
+
 [Unreleased]: https://github.com/nlines/noellines.com/compare/main...HEAD
