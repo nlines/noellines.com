@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <title>NL</title>
+  <rect width="64" height="64" fill="#0a0a0a"/>
+  <g fill="#e17100" transform="translate(32 32) scale(1.15) translate(-32.5 -32)">
+    <!-- N -->
+    <path d="M15 45V19h5.5l6 17V19H32v26h-5.5l-6-17v17z"/>
+    <!-- L -->
+    <path d="M37 19h5.5v20.5H50V45H37z"/>
+  </g>
+</svg>

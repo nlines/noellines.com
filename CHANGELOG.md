@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Escape now closes the small-screen nav menu, returning focus to the menu button.
 - Tri-state theme toggle (light / dark / system) in the site header, backed by [`@nuxtjs/color-mode`](https://github.com/nuxt-modules/color-mode). The chosen preference persists, and the theme is applied before first paint so there is no flash.
 - Home hero: a full-bleed portrait with a large "Engineer / Builder / Technologist" headline overlapping it, always dark. The portrait ships in three responsive sizes, and its scroll motion is CSS only (scroll-driven animations), skipped under `prefers-reduced-motion` and in browsers that lack support. A placeholder section below it gives the page scroll distance.
+- Site icon: a black square with "NL" in the site's amber accent, as an SVG favicon with `.ico` and Apple touch icon fallbacks, replacing the default Nuxt icon.
 
 ### Changed
 
