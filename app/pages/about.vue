@@ -3,6 +3,13 @@ import { buttonVariants } from '@/components/ui/button'
 
 usePageTitle('About')
 
+// Whole years of experience since January 2012. The start is a January, so
+// the count rises by one on each 1 January. It is worked out when the page is
+// rendered, so a static build shows the year it was built in; redeploying
+// after New Year brings it up to date.
+const careerStartYear = 2012
+const yearsOfExperience = new Date().getFullYear() - careerStartYear
+
 // The career arc, oldest first. Each step is one job on the résumé; the last
 // is the current one and gets the accent rule.
 const path = [
@@ -10,7 +17,7 @@ const path = [
   { year: '2015', title: 'Consulting', detail: 'Websites, APIs and cloud apps on Azure' },
   { year: '2018', title: 'Product', detail: 'Analytics platform at eVestment, a Nasdaq company' },
   { year: '2024', title: 'Developer experience', detail: 'CI/CD and migration tooling' },
-  { year: '2025', title: 'Platform and AI', detail: 'Infrastructure as code and security agents' },
+  { year: '2026', title: 'Platform and AI', detail: 'Infrastructure as code and security agents' },
 ]
 
 const tools = [
@@ -37,10 +44,10 @@ const tools = [
 
     <div class="mt-8 flex flex-col gap-5 text-muted-foreground">
       <p>
-        I'm a senior software engineer with 15 years of experience. From
-        product features to cloud infrastructure, I know both sides of the
-        handoff: what teams need to deploy and ship, and what it takes to keep
-        it safe.
+        I'm a senior software engineer with {{ yearsOfExperience }} years of
+        experience. From product features to cloud infrastructure, I know both
+        sides of the handoff: what teams need to deploy and ship, and what it
+        takes to keep it safe.
       </p>
       <p>
         I started out building the products people use: web applications, APIs
