@@ -4,11 +4,18 @@ import { buttonVariants } from '@/components/ui/button'
 usePageTitle('About')
 
 // Whole years of experience since January 2012. The start is a January, so
-// the count rises by one on each 1 January. It is worked out when the page is
-// rendered, so a static build shows the year it was built in; redeploying
-// after New Year brings it up to date.
+// the count rises by one on each 1 January.
+//
+// The page is prerendered, so the HTML carries the figure from the day of the
+// build. `useState` hands that same value to the browser, so hydration sees no
+// difference, and `onMounted` then swaps in the figure for the visitor's clock.
+// A stale build therefore corrects itself without a hydration mismatch.
 const careerStartYear = 2012
-const yearsOfExperience = new Date().getFullYear() - careerStartYear
+const currentYears = () => new Date().getFullYear() - careerStartYear
+const yearsOfExperience = useState('years-of-experience', currentYears)
+onMounted(() => {
+  yearsOfExperience.value = currentYears()
+})
 
 // The career arc, oldest first. Each step is one job on the résumé; the last
 // is the current one and gets the accent rule.

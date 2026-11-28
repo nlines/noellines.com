@@ -38,7 +38,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Bumped `@nuxt/devtools` off a stale `^1.0.3` pin that pulled a second major version of Vite into the dependency tree.
 - All four routes are now prerendered, via a seeded `nitro.prerender` crawl rather than a single route rule.
 - Dark mode uses the same amber accent as light mode. It previously used a lighter shade from further up Tailwind's amber ramp, which also reads noticeably more yellow, since the ramp shifts hue as it lightens.
-- About page: the years-of-experience figure is calculated from a start year instead of being typed in, so it rises each January once the site is rebuilt. The last career-path step is now dated 2026.
+- About page: the years-of-experience figure is calculated from a start year instead of being typed in, and it corrects itself in the visitor's browser each January, even before the site is rebuilt. The last career-path step is now dated 2026.
 
 ### Fixed
 
