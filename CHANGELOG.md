@@ -21,13 +21,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Per-page titles via a `%s · Noel Lines` template.
 - Escape now closes the small-screen nav menu, returning focus to the menu button.
 - Tri-state theme toggle (light / dark / system) in the site header, backed by [`@nuxtjs/color-mode`](https://github.com/nuxt-modules/color-mode). The chosen preference persists, and the theme is applied before first paint so there is no flash.
-- Home hero: a full-bleed portrait with a large "Engineer / Builder / Technologist" headline overlapping it, always dark. The portrait ships in three responsive sizes, and its scroll motion is CSS only (scroll-driven animations), skipped under `prefers-reduced-motion` and in browsers that lack support. A placeholder section below it gives the page scroll distance.
+- Home hero: a full-bleed portrait with a large "Engineer / Builder / Technologist" headline overlapping it, always dark. The portrait ships in three responsive sizes, and its scroll motion is CSS only (scroll-driven animations), skipped under `prefers-reduced-motion` and in browsers that lack support.
 - Site icon: a black square with "NL" in the site's amber accent, as an SVG favicon with `.ico` and Apple touch icon fallbacks, replacing the default Nuxt icon.
 - Home page tab title reads "Noel Lines - Engineer, Builder, Technologist"; the other pages keep the `%s · Noel Lines` template.
 - Open Graph and Twitter card tags with a 1200×627 portrait card, so shared links (LinkedIn, Slack, X) unfurl with an image, title and description.
 - Per-page titles in link previews: About, Projects and Contact now share as "About · Noel Lines" and so on, matching their browser tabs, through a `usePageTitle` composable.
 - About page: first real content, a short bio, a five-step career timeline, a core-tools list and a contact link, replacing the placeholder copy.
 - Contact page: real email, GitHub and LinkedIn links in place of the placeholders. Web links open in a new tab, with a screen-reader note, while the email link does not.
+- Home: a "What I do" section of three cards and a closing "Get in touch" band with email and LinkedIn buttons, replacing the placeholder section.
 
 ### Changed
 
