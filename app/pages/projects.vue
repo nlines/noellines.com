@@ -1,13 +1,6 @@
 <script setup lang="ts">
 usePageTitle('Projects')
-
-// Placeholder entries. Plain objects for now — no data layer until the real
-// project list exists and its shape is settled.
-const projects = [
-  { title: 'Project one', description: 'Placeholder description of the first project.' },
-  { title: 'Project two', description: 'Placeholder description of the second project.' },
-  { title: 'Project three', description: 'Placeholder description of the third project.' },
-]
+// `projects` comes from app/utils/projects.ts.
 </script>
 
 <template>
@@ -16,24 +9,12 @@ const projects = [
       Projects
     </h1>
     <p class="mt-4 max-w-prose text-muted-foreground">
-      Placeholder list. ui-plan.md flags a denser, edge-to-edge visual grid as
-      the eventual direction here.
+      A selection of the applications and services I've built.
     </p>
 
-    <!-- Plain Tailwind cards rather than the shadcn `card` component: this is
-         presentational, so it avoids an `add` plus its fix:shadcn-extends run. -->
-    <ul class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      <li
-        v-for="project in projects"
-        :key="project.title"
-        class="rounded-lg border border-border bg-card p-5 text-card-foreground"
-      >
-        <h2 class="font-semibold">
-          {{ project.title }}
-        </h2>
-        <p class="mt-2 text-sm text-muted-foreground">
-          {{ project.description }}
-        </p>
+    <ul class="mt-10 grid gap-4 sm:grid-cols-2">
+      <li v-for="project in projects" :key="project.title">
+        <ProjectCard :project="project" />
       </li>
     </ul>
   </section>

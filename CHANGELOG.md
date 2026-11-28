@@ -29,6 +29,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - About page: first real content, a short bio, a five-step career timeline, a core-tools list and a contact link, replacing the placeholder copy.
 - Contact page: real email, GitHub and LinkedIn links in place of the placeholders. Web links open in a new tab, with a screen-reader note, while the email link does not.
 - Home: a "What I do" section of three cards and a closing "Get in touch" band with email and LinkedIn buttons, replacing the placeholder section.
+- Projects page: ten projects, most recent first, each with a period, a short summary and tech tags, described generically with no employer product names. The project data lives in one file and a shared card draws both this page and a three-project "What I've built" teaser on Home.
 
 ### Changed
 
