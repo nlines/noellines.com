@@ -1,5 +1,5 @@
 <script setup lang="ts">
-useHead({ title: 'Projects' })
+usePageTitle('Projects')
 
 // Placeholder entries. Plain objects for now — no data layer until the real
 // project list exists and its shape is settled.

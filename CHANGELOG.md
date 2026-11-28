@@ -25,6 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Site icon: a black square with "NL" in the site's amber accent, as an SVG favicon with `.ico` and Apple touch icon fallbacks, replacing the default Nuxt icon.
 - Home page tab title reads "Noel Lines - Engineer, Builder, Technologist"; the other pages keep the `%s · Noel Lines` template.
 - Open Graph and Twitter card tags with a 1200×627 portrait card, so shared links (LinkedIn, Slack, X) unfurl with an image, title and description.
+- Per-page titles in link previews: About, Projects and Contact now share as "About · Noel Lines" and so on, matching their browser tabs, through a `usePageTitle` composable.
 
 ### Changed
 

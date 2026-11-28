@@ -1,5 +1,5 @@
 <script setup lang="ts">
-useHead({ title: 'Contact' })
+usePageTitle('Contact')
 
 // Placeholder targets — swap for real handles before this ships.
 const contacts = [
