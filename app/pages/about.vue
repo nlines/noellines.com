@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { TooltipArrow, TooltipContent, TooltipPortal, TooltipProvider, TooltipRoot, TooltipTrigger } from 'reka-ui'
 import { buttonVariants } from '@/components/ui/button'
 
 usePageTitle('About')
@@ -27,15 +28,23 @@ const path = [
   { year: '2026', title: 'Platform and AI', detail: 'Infrastructure as code and security agents' },
 ]
 
+// Kept in alphabetical order. Each description says what the tool is, not how
+// much I have used it, and shows in a tooltip on hover or keyboard focus.
 const tools = [
-  'AWS',
-  'Azure',
-  'Terraform',
-  'GitLab CI/CD',
-  'C#/.NET',
-  'Python',
-  'Claude',
-  'GitHub Copilot',
+  { name: 'AWS', description: 'Amazon\'s cloud platform' },
+  { name: 'Azure', description: 'Microsoft\'s cloud platform' },
+  { name: 'Backstage', description: 'Open-source developer portal framework' },
+  { name: 'C#/.NET', description: 'Microsoft\'s language and application platform' },
+  { name: 'Claude', description: 'Anthropic\'s AI assistant and models' },
+  { name: 'Databricks', description: 'Data and AI analytics platform' },
+  { name: 'Datadog', description: 'Monitoring and observability platform' },
+  { name: 'Docker', description: 'Container packaging and runtime' },
+  { name: 'Elasticsearch', description: 'Search and analytics engine' },
+  { name: 'GitHub Copilot', description: 'AI pair-programming assistant' },
+  { name: 'GitLab CI/CD', description: 'Built-in build, test and deploy pipelines' },
+  { name: 'Python', description: 'General-purpose programming language' },
+  { name: 'Terraform', description: 'Infrastructure-as-code tool' },
+  { name: 'Vue.js', description: 'JavaScript framework for user interfaces' },
 ]
 </script>
 
@@ -95,15 +104,32 @@ const tools = [
     <h2 class="mt-12 text-sm font-medium tracking-widest text-muted-foreground uppercase">
       Core tools
     </h2>
-    <ul class="mt-4 flex flex-wrap gap-2">
-      <li
-        v-for="tool in tools"
-        :key="tool"
-        class="rounded-full border border-border bg-card px-3 py-1 text-sm text-card-foreground"
-      >
-        {{ tool }}
-      </li>
-    </ul>
+    <!-- Each chip is a focusable button so keyboard and screen-reader users get
+         the description too; it has no action of its own. -->
+    <TooltipProvider :delay-duration="200">
+      <ul class="mt-4 flex flex-wrap gap-2">
+        <li v-for="tool in tools" :key="tool.name">
+          <TooltipRoot>
+            <TooltipTrigger
+              type="button"
+              class="rounded-full border border-border bg-card px-3 py-1 text-sm text-card-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+            >
+              {{ tool.name }}
+            </TooltipTrigger>
+            <TooltipPortal>
+              <TooltipContent
+                side="top"
+                :side-offset="8"
+                class="z-50 max-w-60 rounded-md border border-border bg-popover px-3 py-1.5 text-center text-sm text-popover-foreground shadow-md"
+              >
+                {{ tool.description }}
+                <TooltipArrow class="fill-popover stroke-border" />
+              </TooltipContent>
+            </TooltipPortal>
+          </TooltipRoot>
+        </li>
+      </ul>
+    </TooltipProvider>
 
     <div class="mt-12">
       <NuxtLink to="/contact" :class="buttonVariants()">
