@@ -1,11 +1,6 @@
 <script setup lang="ts">
-useHead({ title: 'Contact' })
-
-// Placeholder targets — swap for real handles before this ships.
-const contacts = [
-  { label: 'Email', value: 'hello@noellines.com', href: 'mailto:hello@noellines.com' },
-  { label: 'GitHub', value: 'github.com/nlines', href: 'https://github.com/nlines' },
-]
+usePageTitle('Contact')
+// `contacts` and `isExternal` come from app/utils/contacts.ts.
 </script>
 
 <template>
@@ -14,17 +9,22 @@ const contacts = [
       Contact
     </h1>
     <p class="mt-4 max-w-prose text-muted-foreground">
-      Placeholder links. Best ways to get in touch will live here.
+      You can reach me by email, or find me on LinkedIn and GitHub.
     </p>
 
     <ul class="mt-10 flex flex-col gap-px overflow-hidden rounded-lg border border-border">
       <li v-for="contact in contacts" :key="contact.label">
         <a
           :href="contact.href"
+          :target="isExternal(contact.href) ? '_blank' : undefined"
+          :rel="isExternal(contact.href) ? 'noopener noreferrer' : undefined"
           class="flex items-baseline justify-between gap-4 bg-card px-5 py-4 transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
         >
           <span class="text-sm font-medium">{{ contact.label }}</span>
-          <span class="text-sm text-muted-foreground">{{ contact.value }}</span>
+          <span class="text-sm text-muted-foreground">
+            {{ contact.value }}
+            <span v-if="isExternal(contact.href)" class="sr-only">(opens in a new tab)</span>
+          </span>
         </a>
       </li>
     </ul>
