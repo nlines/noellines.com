@@ -1,15 +1,6 @@
 <script setup lang="ts">
 usePageTitle('Contact')
-
-const contacts = [
-  { label: 'Email', value: 'nlines@gmail.com', href: 'mailto:nlines@gmail.com' },
-  { label: 'GitHub', value: 'github.com/nlines', href: 'https://github.com/nlines' },
-  { label: 'LinkedIn', value: 'linkedin.com/in/noel-lines', href: 'https://www.linkedin.com/in/noel-lines/' },
-]
-
-// Web links open in a new tab so the visitor keeps this site; a mailto: link
-// hands off to the mail app and must not open a blank tab.
-const isExternal = (href: string) => href.startsWith('http')
+// `contacts` and `isExternal` come from app/utils/contacts.ts.
 </script>
 
 <template>
